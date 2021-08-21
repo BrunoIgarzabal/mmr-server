@@ -15,4 +15,11 @@ describe('CreateUnitOfMeasurementUseCase', () => {
 
     await expect(promise).rejects.toThrow(new MissingParamError('name'))
   })
+
+  test('should throw if no symbol is provided', async () => {
+    const { sut } = makeSut()
+    const promise = sut.create({ name: 'any_name' })
+
+    await expect(promise).rejects.toThrow(new MissingParamError('symbol'))
+  })
 })
