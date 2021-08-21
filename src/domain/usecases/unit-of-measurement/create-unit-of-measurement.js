@@ -5,5 +5,9 @@ module.exports = class CreateUnitOfMeasurementUseCase {
     if (!name) {
       throw new MissingParamError('name')
     }
+
+    if (!symbol) {
+      throw new MissingParamError('symbol')
+    }
   }
 }
