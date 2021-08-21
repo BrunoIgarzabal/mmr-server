@@ -43,4 +43,19 @@ describe('CreateUnitOfMeasurementUseCase', () => {
     expect(unitOfMeasurementRepositorySpy.name).toBe('any_name')
     expect(unitOfMeasurementRepositorySpy.symbol).toBe('any_symbol')
   })
+
+  test('should throw if no dependencies are provided', async () => {
+    const invalid = {}
+
+    const suts = [].concat(
+      new CreateUnitOfMeasurementUseCase(),
+      new CreateUnitOfMeasurementUseCase({ unitOfMeasurementRepository: null }),
+      new CreateUnitOfMeasurementUseCase({ unitOfMeasurementRepository: invalid })
+    )
+
+    for (const sut of suts) {
+      const promise = sut.create({ name: 'any_name', symbol: 'any_symbol' })
+      await expect(promise).rejects.toThrow()
+    }
+  })
 })
