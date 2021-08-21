@@ -36,7 +36,7 @@ describe('CreateUnitOfMeasurementUseCase', () => {
     await expect(promise).rejects.toThrow(new MissingParamError('symbol'))
   })
 
-  test('should call UnitOfMeasurementRepository with correct name and symbol', async () => {
+  test('should call UnitOfMeasurementRepository save with correct name and symbol', async () => {
     const { sut, unitOfMeasurementRepositorySpy } = makeSut()
     await sut.create({ name: 'any_name', symbol: 'any_symbol' })
 
