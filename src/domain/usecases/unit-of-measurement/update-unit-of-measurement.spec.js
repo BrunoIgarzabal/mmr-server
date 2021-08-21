@@ -3,10 +3,24 @@ const UpdateUnitOfMeasurementUseCase = require('./update-unit-of-measurement')
 
 const anyId = 1
 
-const makeSut = () => {
-  const sut = new UpdateUnitOfMeasurementUseCase()
+const makeUnitOfMeasurementRepository = () => {
+  class UnitOfMeasurementRepositorySpy {
+    async update ({ id, name, symbol } = {}) {
+      this.id = id
+      this.name = name
+      this.symbol = symbol
+    }
+  }
+  return new UnitOfMeasurementRepositorySpy()
+}
 
-  return { sut }
+const makeSut = () => {
+  const unitOfMeasurementRepositorySpy = makeUnitOfMeasurementRepository()
+  const sut = new UpdateUnitOfMeasurementUseCase({
+    unitOfMeasurementRepository: unitOfMeasurementRepositorySpy
+  })
+
+  return { sut, unitOfMeasurementRepositorySpy }
 }
 
 describe('UpdateUnitOfMeasurementUseCase', () => {
@@ -29,5 +43,14 @@ describe('UpdateUnitOfMeasurementUseCase', () => {
     const promise = sut.update({ id: anyId, name: 'any_name' })
 
     await expect(promise).rejects.toThrow(new MissingParamError('symbol'))
+  })
+
+  test('should call UnitOfMeasurementRepository update with correct id, name and symbol', async () => {
+    const { sut, unitOfMeasurementRepositorySpy } = makeSut()
+    await sut.update({ id: anyId, name: 'any_name', symbol: 'any_symbol' })
+
+    expect(unitOfMeasurementRepositorySpy.id).toBe(anyId)
+    expect(unitOfMeasurementRepositorySpy.name).toBe('any_name')
+    expect(unitOfMeasurementRepositorySpy.symbol).toBe('any_symbol')
   })
 })
