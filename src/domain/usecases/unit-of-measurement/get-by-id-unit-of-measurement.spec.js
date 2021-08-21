@@ -1,7 +1,19 @@
-const { MissingParamError } = require('../../../shared/errors')
+const { MissingParamError, ObjectNotFoundError } = require('../../../shared/errors')
 const { UnitOfMeasurement } = require('../../models')
 
 const GetByIdUnitOfMeasurementUseCase = require('./get-by-id-unit-of-measurement')
+
+const anyId = 1
+
+const makeUnitOfMeasurementRepositoryWithError = () => {
+  class UnitOfMeasurementRepositorySpy {
+    async getById (id) {
+      this.id = id
+      return null
+    }
+  }
+  return new UnitOfMeasurementRepositorySpy()
+}
 
 const makeUnitOfMeasurementRepository = () => {
   class UnitOfMeasurementRepositorySpy {
@@ -40,5 +52,16 @@ describe('GetByIdUnitOfMeasurementUseCase', () => {
     expect(unitOfMeasurement.id).toBe(anyId)
     expect(unitOfMeasurement.name).toBe('any_name')
     expect(unitOfMeasurement.symbol).toBe('any_symbol')
+  })
+
+  test('should throws if invalid id is provided', async () => {
+    const unitOfMeasurementRepositorySpy = makeUnitOfMeasurementRepositoryWithError()
+    const sut = new GetByIdUnitOfMeasurementUseCase({
+      unitOfMeasurementRepository: unitOfMeasurementRepositorySpy
+    })
+
+    const promise = sut.get(anyId)
+
+    await expect(promise).rejects.toThrow(new ObjectNotFoundError(anyId))
   })
 })
