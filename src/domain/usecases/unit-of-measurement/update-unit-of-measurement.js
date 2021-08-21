@@ -5,5 +5,9 @@ module.exports = class UpdateUnitOfMeasurementUseCase {
     if (!id) {
       throw new MissingParamError('id')
     }
+
+    if (!name) {
+      throw new MissingParamError('name')
+    }
   }
 }
