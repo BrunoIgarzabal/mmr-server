@@ -2,10 +2,23 @@ const CreateUnitOfMeasurementUseCase = require('./create-unit-of-measurement')
 
 const { MissingParamError } = require('../../../shared/errors')
 
-const makeSut = () => {
-  const sut = new CreateUnitOfMeasurementUseCase()
+const makeUnitOfMeasurementRepository = () => {
+  class UnitOfMeasurementRepositorySpy {
+    async save ({ name, symbol } = {}) {
+      this.name = name
+      this.symbol = symbol
+    }
+  }
+  return new UnitOfMeasurementRepositorySpy()
+}
 
-  return { sut }
+const makeSut = () => {
+  const unitOfMeasurementRepositorySpy = makeUnitOfMeasurementRepository()
+  const sut = new CreateUnitOfMeasurementUseCase({
+    unitOfMeasurementRepository: unitOfMeasurementRepositorySpy
+  })
+
+  return { sut, unitOfMeasurementRepositorySpy }
 }
 
 describe('CreateUnitOfMeasurementUseCase', () => {
@@ -21,5 +34,13 @@ describe('CreateUnitOfMeasurementUseCase', () => {
     const promise = sut.create({ name: 'any_name' })
 
     await expect(promise).rejects.toThrow(new MissingParamError('symbol'))
+  })
+
+  test('should call UnitOfMeasurementRepository with correct name and symbol', async () => {
+    const { sut, unitOfMeasurementRepositorySpy } = makeSut()
+    await sut.create({ name: 'any_name', symbol: 'any_symbol' })
+
+    expect(unitOfMeasurementRepositorySpy.name).toBe('any_name')
+    expect(unitOfMeasurementRepositorySpy.symbol).toBe('any_symbol')
   })
 })
