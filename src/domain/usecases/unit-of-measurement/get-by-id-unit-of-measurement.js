@@ -1,4 +1,4 @@
-const { MissingParamError } = require('../../../shared/errors')
+const { MissingParamError, ObjectNotFoundError } = require('../../../shared/errors')
 
 module.exports = class GetByIdUnitOfMeasurementUseCase {
   constructor ({ unitOfMeasurementRepository } = {}) {
@@ -11,6 +11,10 @@ module.exports = class GetByIdUnitOfMeasurementUseCase {
     }
 
     const unitOfMeasurement = await this.unitOfMeasurementRepository.getById(id)
+
+    if (!unitOfMeasurement || !unitOfMeasurement.name || !unitOfMeasurement.symbol) {
+      throw new ObjectNotFoundError(id)
+    }
 
     return unitOfMeasurement
   }
