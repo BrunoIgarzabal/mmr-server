@@ -35,4 +35,19 @@ describe('DeleteUnitOfMeasurementUseCase', () => {
 
     expect(unitOfMeasurementRepositorySpy.id).toBe(anyId)
   })
+
+  test('should throw if no dependencies are provided', async () => {
+    const invalid = {}
+
+    const suts = [].concat(
+      new DeleteUnitOfMeasurementUseCase(),
+      new DeleteUnitOfMeasurementUseCase({ unitOfMeasurementRepository: null }),
+      new DeleteUnitOfMeasurementUseCase({ unitOfMeasurementRepository: invalid })
+    )
+
+    for (const sut of suts) {
+      const promise = sut.delete(anyId)
+      await expect(promise).rejects.toThrow()
+    }
+  })
 })
