@@ -23,4 +23,11 @@ describe('UpdateUnitOfMeasurementUseCase', () => {
 
     await expect(promise).rejects.toThrow(new MissingParamError('name'))
   })
+
+  test('should throw if no symbol is provided', async () => {
+    const { sut } = makeSut()
+    const promise = sut.update({ id: anyId, name: 'any_name' })
+
+    await expect(promise).rejects.toThrow(new MissingParamError('symbol'))
+  })
 })
