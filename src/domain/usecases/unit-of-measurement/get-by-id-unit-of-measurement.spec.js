@@ -64,4 +64,19 @@ describe('GetByIdUnitOfMeasurementUseCase', () => {
 
     await expect(promise).rejects.toThrow(new ObjectNotFoundError(anyId))
   })
+
+  test('should throw if no dependencies are provided', async () => {
+    const invalid = {}
+
+    const suts = [].concat(
+      new GetByIdUnitOfMeasurementUseCase(),
+      new GetByIdUnitOfMeasurementUseCase({ unitOfMeasurementRepository: null }),
+      new GetByIdUnitOfMeasurementUseCase({ unitOfMeasurementRepository: invalid })
+    )
+
+    for (const sut of suts) {
+      const promise = sut.get(anyId)
+      await expect(promise).rejects.toThrow()
+    }
+  })
 })
