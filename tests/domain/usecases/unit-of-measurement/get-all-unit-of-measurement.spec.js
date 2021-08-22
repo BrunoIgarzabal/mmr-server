@@ -26,4 +26,19 @@ describe('GetAllUnitOfMeasurementUseCase', () => {
 
     expect(Array.isArray(list)).toBe(true)
   })
+
+  test('should throw if no dependencies are provided', async () => {
+    const invalid = {}
+
+    const suts = [].concat(
+      new GetAllUnitOfMeasurementUseCase(),
+      new GetAllUnitOfMeasurementUseCase({ unitOfMeasurementRepository: null }),
+      new GetAllUnitOfMeasurementUseCase({ unitOfMeasurementRepository: invalid })
+    )
+
+    for (const sut of suts) {
+      const promise = sut.getAll()
+      await expect(promise).rejects.toThrow()
+    }
+  })
 })
