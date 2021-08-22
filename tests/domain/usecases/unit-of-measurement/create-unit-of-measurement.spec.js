@@ -1,6 +1,6 @@
-const CreateUnitOfMeasurementUseCase = require('./create-unit-of-measurement')
+const { CreateUnitOfMeasurementUseCase } = require('../../../../src/domain/usecases/unit-of-measurement/')
 
-const { MissingParamError } = require('../../../shared/errors')
+const { MissingParamError } = require('../../../../src/shared/errors')
 
 const makeUnitOfMeasurementRepository = () => {
   class UnitOfMeasurementRepositorySpy {

@@ -1,5 +1,5 @@
-const { MissingParamError } = require('../../../shared/errors')
-const UpdateUnitOfMeasurementUseCase = require('./update-unit-of-measurement')
+const { MissingParamError } = require('../../../../src/shared/errors')
+const { UpdateUnitOfMeasurementUseCase } = require('../../../../src/domain/usecases/unit-of-measurement/')
 
 const anyId = 1
 

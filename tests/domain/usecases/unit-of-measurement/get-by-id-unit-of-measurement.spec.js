@@ -1,7 +1,7 @@
-const { MissingParamError, ObjectNotFoundError } = require('../../../shared/errors')
-const { UnitOfMeasurement } = require('../../models')
+const { MissingParamError, ObjectNotFoundError } = require('../../../../src/shared/errors')
+const { UnitOfMeasurement } = require('../../../../src/domain/models')
 
-const GetByIdUnitOfMeasurementUseCase = require('./get-by-id-unit-of-measurement')
+const { GetByIdUnitOfMeasurementUseCase } = require('../../../../src/domain/usecases/unit-of-measurement/')
 
 const anyId = 1
 
