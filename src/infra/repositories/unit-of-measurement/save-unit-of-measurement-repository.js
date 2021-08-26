@@ -2,7 +2,7 @@ const { MissingParamError } = require('../../../shared/errors')
 const { UnitOfMeasurement } = require('../../orm/sequelize/models')
 
 module.exports = class SaveUnitOfMeasurementRepository {
-  async create ({ name, symbol }) {
+  async create ({ name, symbol } = {}) {
     if (!name) {
       throw new MissingParamError('name')
     }
