@@ -6,10 +6,13 @@ const makeCreateUnitOfMeasurementUseCase = () => {
     async create ({ name, symbol } = {}) {
       this.name = name
       this.symbol = symbol
+
+      return { name, symbol, id: this.id }
     }
   }
-
-  return new CreateUnitOfMeasurementUseCaseSpy()
+  const repository = new CreateUnitOfMeasurementUseCaseSpy()
+  repository.id = 1
+  return repository
 }
 
 const makeSut = () => {
@@ -72,5 +75,19 @@ describe('CreateUnitOfMeasurement Router', () => {
 
     expect(createUnitOfMeasurementUseCaseSpy.name).toBe(httpRequest.body.name)
     expect(createUnitOfMeasurementUseCaseSpy.symbol).toBe(httpRequest.body.symbol)
+  })
+
+  test('should return 201 if valid model is provided', async () => {
+    const { sut, createUnitOfMeasurementUseCaseSpy } = makeSut()
+    const httpRequest = {
+      body: {
+        name: 'any_name',
+        symbol: 'any_symbol'
+      }
+    }
+    const response = await sut.route(httpRequest)
+
+    expect(response.statusCode).toBe(201)
+    expect(response.body.id).toBe(createUnitOfMeasurementUseCaseSpy.id)
   })
 })
