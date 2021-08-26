@@ -8,6 +8,13 @@ module.exports = class HttpResponse {
     }
   }
 
+  static created (body) {
+    return {
+      statusCode: 201,
+      body
+    }
+  }
+
   static badRequest (error) {
     return {
       statusCode: 400,

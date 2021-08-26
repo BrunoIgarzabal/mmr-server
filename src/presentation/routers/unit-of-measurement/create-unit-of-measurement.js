@@ -18,7 +18,9 @@ module.exports = class CreateUnitOfMeasurementRouter {
         return HttpResponse.unprocessableEntity(new MissingParamError('symbol'))
       }
 
-      await this.createUnitOfMeasurementUseCase.create({ name, symbol })
+      const response = await this.createUnitOfMeasurementUseCase.create({ name, symbol })
+
+      return HttpResponse.created({ id: response.id })
     } catch (error) {
       return HttpResponse.serverError()
     }
