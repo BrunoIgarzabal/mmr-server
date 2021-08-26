@@ -1,14 +1,14 @@
 const connection = require('../../../../src/infra/orm/sequelize/sequelize')
-const { SaveUnitOfMeasurementRepository } = require('../../../../src/infra/repositories/unit-of-measurement')
+const { CreateUnitOfMeasurementRepository } = require('../../../../src/infra/repositories/unit-of-measurement')
 const { MissingParamError } = require('../../../../src/shared/errors')
 
 const makeSut = () => {
-  const sut = new SaveUnitOfMeasurementRepository()
+  const sut = new CreateUnitOfMeasurementRepository()
 
   return { sut }
 }
 
-describe('SaveUnitOfMeasurementRepository', () => {
+describe('CreateUnitOfMeasurementRepository', () => {
   beforeAll(async () => {
     await connection.sync({ force: true })
   })

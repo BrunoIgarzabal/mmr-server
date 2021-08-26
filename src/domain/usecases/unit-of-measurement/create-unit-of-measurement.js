@@ -2,8 +2,8 @@ const { MissingParamError, ServerError } = require('../../../shared/errors')
 const { UnitOfMeasurement } = require('../../models')
 
 module.exports = class CreateUnitOfMeasurementUseCase {
-  constructor ({ unitOfMeasurementRepository } = {}) {
-    this.unitOfMeasurementRepository = unitOfMeasurementRepository
+  constructor ({ createUnitOfMeasurementRepository } = {}) {
+    this.createUnitOfMeasurementRepository = createUnitOfMeasurementRepository
   }
 
   async create ({ name, symbol } = {}) {
@@ -15,15 +15,17 @@ module.exports = class CreateUnitOfMeasurementUseCase {
       throw new MissingParamError('symbol')
     }
 
-    if (!this.unitOfMeasurementRepository) {
-      throw new ServerError('No UnitOfMeasurementRepository provided')
+    if (!this.createUnitOfMeasurementRepository) {
+      throw new ServerError('No CreateUnitOfMeasurementRepository provided')
     }
 
-    if (!this.unitOfMeasurementRepository.save) {
-      throw new ServerError('No valid UnitOfMeasurementRepository provided')
+    if (!this.createUnitOfMeasurementRepository.create) {
+      throw new ServerError('No valid CreateUnitOfMeasurementRepository provided')
     }
 
     const unitOfMeasurement = new UnitOfMeasurement({ name, symbol })
-    await this.unitOfMeasurementRepository.save(unitOfMeasurement)
+    const response = await this.createUnitOfMeasurementRepository.create(unitOfMeasurement)
+
+    return response
   }
 }

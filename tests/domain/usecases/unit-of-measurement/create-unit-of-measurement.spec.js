@@ -2,23 +2,25 @@ const { CreateUnitOfMeasurementUseCase } = require('../../../../src/domain/useca
 
 const { MissingParamError } = require('../../../../src/shared/errors')
 
-const makeUnitOfMeasurementRepository = () => {
-  class UnitOfMeasurementRepositorySpy {
-    async save ({ name, symbol } = {}) {
+const makeCreateUnitOfMeasurementRepository = () => {
+  class CreateUnitOfMeasurementRepositorySpy {
+    async create ({ name, symbol } = {}) {
       this.name = name
       this.symbol = symbol
+
+      return { name, symbol }
     }
   }
-  return new UnitOfMeasurementRepositorySpy()
+  return new CreateUnitOfMeasurementRepositorySpy()
 }
 
 const makeSut = () => {
-  const unitOfMeasurementRepositorySpy = makeUnitOfMeasurementRepository()
+  const createUnitOfMeasurementRepositorySpy = makeCreateUnitOfMeasurementRepository()
   const sut = new CreateUnitOfMeasurementUseCase({
-    unitOfMeasurementRepository: unitOfMeasurementRepositorySpy
+    createUnitOfMeasurementRepository: createUnitOfMeasurementRepositorySpy
   })
 
-  return { sut, unitOfMeasurementRepositorySpy }
+  return { sut, createUnitOfMeasurementRepositorySpy }
 }
 
 describe('CreateUnitOfMeasurementUseCase', () => {
@@ -36,12 +38,20 @@ describe('CreateUnitOfMeasurementUseCase', () => {
     await expect(promise).rejects.toThrow(new MissingParamError('symbol'))
   })
 
+  test('should return UnitOfMeasurement when save', async () => {
+    const { sut } = makeSut()
+    const response = await sut.create({ name: 'any_name', symbol: 'any_symbol' })
+
+    expect(response.name).toBe('any_name')
+    expect(response.symbol).toBe('any_symbol')
+  })
+
   test('should call UnitOfMeasurementRepository save with correct name and symbol', async () => {
-    const { sut, unitOfMeasurementRepositorySpy } = makeSut()
+    const { sut, createUnitOfMeasurementRepositorySpy } = makeSut()
     await sut.create({ name: 'any_name', symbol: 'any_symbol' })
 
-    expect(unitOfMeasurementRepositorySpy.name).toBe('any_name')
-    expect(unitOfMeasurementRepositorySpy.symbol).toBe('any_symbol')
+    expect(createUnitOfMeasurementRepositorySpy.name).toBe('any_name')
+    expect(createUnitOfMeasurementRepositorySpy.symbol).toBe('any_symbol')
   })
 
   test('should throw if no dependencies are provided', async () => {
@@ -49,8 +59,8 @@ describe('CreateUnitOfMeasurementUseCase', () => {
 
     const suts = [].concat(
       new CreateUnitOfMeasurementUseCase(),
-      new CreateUnitOfMeasurementUseCase({ unitOfMeasurementRepository: null }),
-      new CreateUnitOfMeasurementUseCase({ unitOfMeasurementRepository: invalid })
+      new CreateUnitOfMeasurementUseCase({ createUnitOfMeasurementRepository: null }),
+      new CreateUnitOfMeasurementUseCase({ createUnitOfMeasurementRepository: invalid })
     )
 
     for (const sut of suts) {

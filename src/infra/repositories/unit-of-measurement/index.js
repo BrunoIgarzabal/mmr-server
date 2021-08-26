@@ -1,5 +1,5 @@
-const SaveUnitOfMeasurementRepository = require('./save-unit-of-measurement-repository')
+const CreateUnitOfMeasurementRepository = require('./create-unit-of-measurement-repository')
 
 module.exports = {
-  SaveUnitOfMeasurementRepository
+  CreateUnitOfMeasurementRepository
 }
