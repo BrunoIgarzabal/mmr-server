@@ -1,7 +1,7 @@
-const { MissingParamError } = require('../../shared/errors')
-const { HttpResponse } = require('../helpers')
+const { MissingParamError } = require('../../../shared/errors')
+const { HttpResponse } = require('../../helpers')
 
-module.exports = class UnitOfMeasurementRouter {
+module.exports = class CreateUnitOfMeasurementRouter {
   async route (httpRequest) {
     try {
       const { name, symbol } = httpRequest.body
