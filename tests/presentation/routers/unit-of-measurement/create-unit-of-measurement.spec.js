@@ -90,4 +90,27 @@ describe('CreateUnitOfMeasurement Router', () => {
     expect(response.statusCode).toBe(201)
     expect(response.body.id).toBe(createUnitOfMeasurementUseCaseSpy.id)
   })
+
+  test('should throw if no dependencies are provided', async () => {
+    const invalid = {}
+
+    const suts = [].concat(
+      new CreateUnitOfMeasurementRouter(),
+      new CreateUnitOfMeasurementRouter({ createUnitOfMeasurementUseCase: null }),
+      new CreateUnitOfMeasurementRouter({ createUnitOfMeasurementUseCase: invalid })
+    )
+
+    const httpRequest = {
+      body: {
+        name: 'any_name',
+        symbol: 'any_symbol'
+      }
+    }
+
+    for (const sut of suts) {
+      const response = await sut.route(httpRequest)
+      expect(response.statusCode).toBe(500)
+      expect(response.body.error).toBe(new ServerError().message)
+    }
+  })
 })
