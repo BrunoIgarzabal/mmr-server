@@ -22,6 +22,7 @@ module.exports = class CreateUnitOfMeasurementRouter {
 
       return HttpResponse.created({ id: response.id })
     } catch (error) {
+      console.error(error)
       return HttpResponse.serverError()
     }
   }
