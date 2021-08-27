@@ -16,8 +16,26 @@ describe('UnitOfMeasurement Routes', () => {
       .post('/api/unit-of-measurement')
       .send({
         name: 'any_name',
-        symbol: 'any_password'
+        symbol: 'any_symbol'
       })
       .expect(201)
+  })
+
+  test('should return 422 when name is not provided', async () => {
+    await request(app)
+      .post('/api/unit-of-measurement')
+      .send({
+        symbol: 'any_symbol'
+      })
+      .expect(422)
+  })
+
+  test('should return 422 when symbol is not provided', async () => {
+    await request(app)
+      .post('/api/unit-of-measurement')
+      .send({
+        name: 'any_name'
+      })
+      .expect(422)
   })
 })
